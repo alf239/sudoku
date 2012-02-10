@@ -122,7 +122,7 @@ public class Sudoku {
             System.exit(-1);
         }
 
-        Sudoku sudoku = readTask(new FileReader(args[0]), Variation.CLASSIC);
+        Sudoku sudoku = readTask(new FileReader(args[0]), Variation.SUPER4X4);
 
         System.out.println("sudoku = \n" + sudoku);
         hbar();
