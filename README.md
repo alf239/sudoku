@@ -1,5 +1,5 @@
 Ready to apply?
-===============
+---------------
 
 Excellent! Impress us by solving the following challenge.
 
