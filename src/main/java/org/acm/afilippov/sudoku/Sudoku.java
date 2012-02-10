@@ -3,7 +3,6 @@ package org.acm.afilippov.sudoku;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.BitSet;
 
 import static java.lang.Math.sqrt;
 
@@ -12,29 +11,26 @@ public class Sudoku {
     public static final int NR_OF_CELLS = BOARD_SIZE * BOARD_SIZE;
     public static final int BLOCK_SIZE = (int) sqrt(BOARD_SIZE);
 
-    private BitSet[][] task = new BitSet[BOARD_SIZE][BOARD_SIZE];
+    private Cell[] cells = new Cell[NR_OF_CELLS];
+    private Group[] groups = new Group[BOARD_SIZE * 3];
 
     public Sudoku(int[] cells) {
         if (cells.length != NR_OF_CELLS)
             throw new IllegalArgumentException("We expect a board of " + BOARD_SIZE + "x" + BOARD_SIZE
                     + ", which is " + NR_OF_CELLS + " cells");
 
-        for (int i = 0, k = 0; i < task.length; i++) {
-            BitSet[] row = task[i];
-            for (int j = 0; j < row.length; j++, k++) {
-
-                row[j] = maskFor(cells[k]);
-            }
+        for (int i = 0; i < NR_OF_CELLS; i++) {
+            this.cells[i] = cells[i] == 0 ? Cell.any() : Cell.only(cells[i]);
         }
-    }
-
-    private BitSet maskFor(int x) {
-        BitSet cell = emptyCell();
-        if (x == 0)
-            cell.set(0, BOARD_SIZE, true);
-        else
-            cell.set(x - 1);
-        return cell;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            groups[i] = new Row(this, i);
+        }
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            groups[BOARD_SIZE + i] = new Column(this, i);
+        }
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            groups[2 * BOARD_SIZE + i] = new Block(this, i);
+        }
     }
 
     /**
@@ -46,77 +42,31 @@ public class Sudoku {
      *         false otherwise.
      */
     public boolean isValid() {
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            BitSet acc = emptyCell();
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                acc.or(task[i][j]);
-            }
-            if (acc.cardinality() < BOARD_SIZE)
+        for (Cell cell : cells)
+            if (!cell.isValid())
                 return false;
-        }
-
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            BitSet acc = emptyCell();
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                acc.or(task[i][j]);
-            }
-            if (acc.cardinality() < BOARD_SIZE)
+        for (Group group : groups)
+            if (!group.isValid())
                 return false;
-        }
-
-        for (int k = 0; k < BOARD_SIZE; k++) {
-            int ri = BLOCK_SIZE * ((k / BLOCK_SIZE) % BLOCK_SIZE);
-            int rj = BLOCK_SIZE * (k / BLOCK_SIZE);
-            BitSet acc = emptyCell();
-            for (int m = 0; m < BOARD_SIZE; m++) {
-                int i = ri + m % BLOCK_SIZE;
-                int j = rj + m / BLOCK_SIZE;
-                acc.or(task[i][j]);
-            }
-            if (acc.cardinality() < BOARD_SIZE)
-                return false;
-        }
-
         return true;
     }
 
-    private BitSet emptyCell() {
-        return new BitSet(BOARD_SIZE);
-    }
-
     public boolean isSolved() {
-        for (BitSet[] row : task) {
-            for (BitSet cell : row) {
-                if (cell.cardinality() > 1)
-                    return false;
-            }
-        }
+        for (Cell cell : cells)
+            if (cell.isDecided())
+                return false;
+
         return isValid();
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < task.length; i++) {
-            BitSet[] row = task[i];
-            for (int j = 0; j < row.length; j++) {
-                BitSet cell = row[j];
-                if (cell.cardinality() > 1)
-                    sb.append('_');
-                else
-                    sb.append(cell.nextSetBit(0) + 1);
-                if (isBlockBorder(j))
-                    sb.append(" ");
-            }
-            sb.append("\n");
-            if (isBlockBorder(i))
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            sb.append(groups[i]).append("\n");
+            if (i != BOARD_SIZE - 1 && i % BLOCK_SIZE == BLOCK_SIZE - 1)
                 sb.append("\n");
         }
         return sb.toString();
-    }
-
-    private boolean isBlockBorder(int i) {
-        return i != BOARD_SIZE - 1 &&
-                i % BLOCK_SIZE == BLOCK_SIZE - 1;
     }
 
     public static Sudoku readTask(Reader reader) throws IOException {
@@ -139,5 +89,9 @@ public class Sudoku {
         Sudoku sudoku = readTask(new FileReader(args[0]));
         System.out.println(sudoku.toString());
         System.out.println("sudoku.isValid() = " + sudoku.isValid());
+    }
+
+    public Cell get(int row, int col) {
+        return cells[row * BOARD_SIZE + col];
     }
 }
