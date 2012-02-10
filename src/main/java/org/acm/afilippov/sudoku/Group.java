@@ -2,6 +2,7 @@ package org.acm.afilippov.sudoku;
 
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
 import java.util.Iterator;
 
 public class Group implements Iterable<Cell> {
@@ -51,5 +52,9 @@ public class Group implements Iterable<Cell> {
             i++;
         }
         return sb.toString();
+    }
+
+    public Collection<? extends Cell> cells() {
+        return Arrays.asList(cells);
     }
 }

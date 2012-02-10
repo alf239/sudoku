@@ -1,5 +1,6 @@
 package org.acm.afilippov.sudoku;
 
+import org.acm.afilippov.sudoku.strategies.HiddenTwins;
 import org.acm.afilippov.sudoku.strategies.LastSurvivor;
 import org.acm.afilippov.sudoku.strategies.SimpleElimination;
 
@@ -48,7 +49,8 @@ public class Sudoku {
     public void solve() {
         Strategy[] strategies = {
                 new SimpleElimination(),
-                new LastSurvivor()
+                new LastSurvivor(),
+                new HiddenTwins()
         };
 
         boolean works;
