@@ -16,7 +16,7 @@ public class Cell {
         groups.add(group);
     }
 
-    public List<Group> getGroups() {
+    public List<? extends Group> getGroups() {
         return groups;
     }
 

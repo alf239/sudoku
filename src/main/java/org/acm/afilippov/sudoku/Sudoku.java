@@ -1,8 +1,14 @@
 package org.acm.afilippov.sudoku;
 
+import org.acm.afilippov.sudoku.groups.Block;
+import org.acm.afilippov.sudoku.groups.Column;
+import org.acm.afilippov.sudoku.groups.Row;
+import org.acm.afilippov.sudoku.strategies.SimpleElimination;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Arrays;
 
 import static java.lang.Math.sqrt;
 
@@ -62,9 +68,9 @@ public class Sudoku {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < BOARD_SIZE; i++) {
-            sb.append(groups[i]).append("\n");
-            if (i != BOARD_SIZE - 1 && i % BLOCK_SIZE == BLOCK_SIZE - 1)
+            if (i % BLOCK_SIZE == 0)
                 sb.append("\n");
+            sb.append(groups[i]).append("\n");
         }
         return sb.toString();
     }
@@ -87,11 +93,22 @@ public class Sudoku {
         }
 
         Sudoku sudoku = readTask(new FileReader(args[0]));
+        SimpleElimination strategy = new SimpleElimination();
+
+        do {
+            System.out.println(sudoku.toString());
+            System.out.println("sudoku.isValid() = " + sudoku.isValid());
+        } while (strategy.apply(sudoku));
+
         System.out.println(sudoku.toString());
-        System.out.println("sudoku.isValid() = " + sudoku.isValid());
+        System.out.println("sudoku.isSolved() = " + sudoku.isSolved());
     }
 
     public Cell get(int row, int col) {
         return cells[row * BOARD_SIZE + col];
+    }
+
+    public Iterable<? extends Cell> cells() {
+        return Arrays.asList(cells);
     }
 }
