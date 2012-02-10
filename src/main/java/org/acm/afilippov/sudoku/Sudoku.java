@@ -41,7 +41,7 @@ public class Sudoku {
 
         for (Cell cell : this.cells) {
             if (cell.getGroups().size() != 3)
-                throw new IllegalStateException("Invalig number of groups!" + cell);
+                throw new IllegalStateException("Invalid number of groups!" + cell);
         }
     }
 
