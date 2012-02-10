@@ -15,6 +15,7 @@ public class Block extends Group {
         super(sudoku);
         row = BLOCK_SIZE * (nr / BLOCK_SIZE);
         col = BLOCK_SIZE * (nr % BLOCK_SIZE);
+        init();
     }
 
     @Override

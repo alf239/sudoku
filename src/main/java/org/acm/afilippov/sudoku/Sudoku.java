@@ -38,6 +38,11 @@ public class Sudoku {
         for (int i = 0; i < BOARD_SIZE; i++) {
             groups[2 * BOARD_SIZE + i] = new Block(this, i);
         }
+
+        for (Cell cell : this.cells) {
+            if (cell.getGroups().size() != 3)
+                throw new IllegalStateException("Invalig number of groups!" + cell);
+        }
     }
 
     /**
