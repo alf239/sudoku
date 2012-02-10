@@ -69,4 +69,8 @@ public class Cell {
     public BitSet mask() {
         return mask;
     }
+
+    public int cardinality() {
+        return mask.cardinality();
+    }
 }

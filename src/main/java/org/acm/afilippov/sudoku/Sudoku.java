@@ -128,6 +128,15 @@ public class Sudoku {
         hbar();
 
         sudoku.solve();
+
+        System.out.println("sudoku.cardinality() = " + sudoku.cardinality());
+    }
+
+    private long cardinality() {
+        long result = 1;
+        for (Cell c : cells)
+            result *= c.cardinality();
+        return result;
     }
 
     public Iterable<? extends Cell> cells() {
