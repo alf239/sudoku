@@ -12,7 +12,7 @@ public class Sudoku {
 
     private final Variation v;
     private final Cell[] cells;
-    private Group[] groups;
+    private final Group[] groups;
 
     public Sudoku(int[] task, Variation variation) {
         if (task.length != variation.getTotal())
