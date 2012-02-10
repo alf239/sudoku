@@ -3,6 +3,7 @@ package org.acm.afilippov.sudoku;
 import org.acm.afilippov.sudoku.groups.Block;
 import org.acm.afilippov.sudoku.groups.Column;
 import org.acm.afilippov.sudoku.groups.Row;
+import org.acm.afilippov.sudoku.strategies.LastSurvivor;
 import org.acm.afilippov.sudoku.strategies.SimpleElimination;
 
 import java.io.FileReader;
@@ -59,7 +60,7 @@ public class Sudoku {
 
     public boolean isSolved() {
         for (Cell cell : cells)
-            if (cell.isDecided())
+            if (!cell.isDecided())
                 return false;
 
         return isValid();
@@ -94,7 +95,8 @@ public class Sudoku {
 
         Sudoku sudoku = readTask(new FileReader(args[0]));
         Strategy[] strategies = {
-                new SimpleElimination()
+                new SimpleElimination(),
+                new LastSurvivor()
         };
 
         boolean works;
@@ -119,5 +121,9 @@ public class Sudoku {
 
     public Iterable<? extends Cell> cells() {
         return Arrays.asList(cells);
+    }
+
+    public Iterable<? extends Group> groups() {
+        return Arrays.asList(groups);
     }
 }
