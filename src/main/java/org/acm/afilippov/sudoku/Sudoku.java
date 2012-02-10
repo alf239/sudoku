@@ -19,11 +19,11 @@ public class Sudoku {
     private Group[] groups = new Group[BOARD_SIZE * 3];
 
     public Sudoku(int[] task) {
-        if (task.length != NR_OF_CELLS)
-            throw new IllegalArgumentException("We expect a board of " + BOARD_SIZE + "x" + BOARD_SIZE
-                    + ", which is " + NR_OF_CELLS + " cells");
+        if (task.length != cells.length)
+            throw new IllegalArgumentException("We expect a board of " + BOARD_SIZE + "x" + BOARD_SIZE + ", "
+                    + "that is, " + NR_OF_CELLS + " cells");
 
-        for (int i = 0; i < NR_OF_CELLS; i++) {
+        for (int i = 0; i < cells.length; i++) {
             cells[i] = task[i] == 0 ? Cell.any() : Cell.only(task[i]);
         }
 
@@ -34,15 +34,16 @@ public class Sudoku {
         for (int i = 0; i < cells.length; i++) {
             int row = i / BOARD_SIZE;
             int col = i % BOARD_SIZE;
+            int block = round(row, BLOCK_SIZE) + col / BLOCK_SIZE;
 
             groups[row].add(cells[i]);
             groups[BOARD_SIZE + col].add(cells[i]);
-            groups[2 * BOARD_SIZE + row / BLOCK_SIZE * BLOCK_SIZE + col / BLOCK_SIZE].add(cells[i]);
+            groups[2 * BOARD_SIZE + block].add(cells[i]);
         }
 
         for (Cell cell : cells) {
             if (cell.getGroups().size() != 3)
-                throw new IllegalStateException("Invalid number of groups!" + cell);
+                throw new IllegalStateException("Invalid number of groups! " + cell);
         }
     }
 
@@ -121,15 +122,15 @@ public class Sudoku {
         System.out.println("sudoku.isSolved() = " + sudoku.isSolved());
     }
 
-    public Cell get(int row, int col) {
-        return cells[row * BOARD_SIZE + col];
-    }
-
     public Iterable<? extends Cell> cells() {
         return Arrays.asList(cells);
     }
 
     public Iterable<? extends Group> groups() {
         return Arrays.asList(groups);
+    }
+
+    private static int round(int a, int r) {
+        return a - a % r;
     }
 }
