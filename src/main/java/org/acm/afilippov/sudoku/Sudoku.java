@@ -93,12 +93,21 @@ public class Sudoku {
         }
 
         Sudoku sudoku = readTask(new FileReader(args[0]));
-        SimpleElimination strategy = new SimpleElimination();
+        Strategy[] strategies = {
+                new SimpleElimination()
+        };
 
+        boolean works;
         do {
-            System.out.println(sudoku.toString());
-            System.out.println("sudoku.isValid() = " + sudoku.isValid());
-        } while (strategy.apply(sudoku));
+            works = false;
+            for (Strategy strategy : strategies) {
+                while (strategy.apply(sudoku)) {
+                    System.out.println(sudoku.toString());
+                    System.out.println("\n=============================");
+                    works = true;
+                }
+            }
+        } while (works);
 
         System.out.println(sudoku.toString());
         System.out.println("sudoku.isSolved() = " + sudoku.isSolved());
