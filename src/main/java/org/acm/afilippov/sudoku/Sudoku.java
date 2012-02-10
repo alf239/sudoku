@@ -108,12 +108,11 @@ public class Sudoku {
         for (int c, i = 0; (c = reader.read()) != -1; ) {
             if (c == '_')
                 cells[i++] = variation.getMissingValue();
-            else if (c >= '0' && c <= '9')
-                cells[i++] = c - '0';
-            else if (c >= 'a' && c <= 'f')
-                cells[i++] = c + 10 - 'a';
-            else if (c >= 'A' && c <= 'F')
-                cells[i++] = c + 10 - 'A';
+            else {
+                int digit = Character.digit(c, Character.MAX_RADIX);
+                if (digit != -1)
+                    cells[i++] = digit;
+            }
         }
         return new Sudoku(cells, variation);
     }
