@@ -14,22 +14,21 @@ public class Sudoku {
     private final Cell[] cells;
     private final Group[] groups;
 
-    public Sudoku(int[] task, Variation variation) {
-        if (task.length != variation.getTotal())
-            throw new IllegalArgumentException("We expect a board of "
-                    + variation.getSize() + "x" + variation.getSize() + ", "
-                    + "that is, " + variation.getTotal() + " cells");
+    public Sudoku(int[] task, Variation v) {
+        if (task.length != v.getTotal())
+            throw new IllegalArgumentException("We expect a board of " + v.getSize() + "x" + v.getSize() + ", "
+                    + "that is, " + v.getTotal() + " cells");
 
-        v = variation;
-        cells = new Cell[variation.getTotal()];
-        groups = new Group[variation.getSize() * 3];
+        this.v = v;
+        cells = new Cell[v.getTotal()];
+        groups = new Group[v.getSize() * 3];
 
         for (int i = 0; i < cells.length; i++) {
-            cells[i] = task[i] == variation.getMissingValue() ? Cell.any(variation) : Cell.only(variation, task[i]);
+            cells[i] = task[i] == v.getMissingValue() ? Cell.any(v) : Cell.only(v, task[i]);
         }
 
         for (int i = 0; i < groups.length; i++) {
-            groups[i] = new Group(variation.getSize());
+            groups[i] = new Group(v.getSize());
         }
 
         for (int i = 0; i < cells.length; i++) {
@@ -39,7 +38,7 @@ public class Sudoku {
 
             groups[row].add(cells[i]);
             groups[v.getSize() + col].add(cells[i]);
-            groups[2 * variation.getSize() + block].add(cells[i]);
+            groups[2 * v.getSize() + block].add(cells[i]);
         }
 
         if (!isValid())
