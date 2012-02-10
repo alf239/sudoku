@@ -7,4 +7,6 @@ in constructor is considered a bad practice.
 
 3. Command line argument VS resources. For the end user, CLI is better; for testing, resources are handy.
 
-4.
+4. The notion of `isValid` is very relaxed: e.g., line 222 222 222 will be fine. What saves us is that elimination
+step will bring this line into an invalid state on its next turn, so we're just postponing the solution
+(we don't want out check for validity to be NP hard)

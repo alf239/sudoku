@@ -29,16 +29,59 @@ public class Sudoku {
     }
 
     private BitSet maskFor(int x) {
-        BitSet cell = new BitSet(BOARD_SIZE);
+        BitSet cell = emptyCell();
         if (x == 0)
-            cell.set(0, BOARD_SIZE - 1, true);
+            cell.set(0, BOARD_SIZE, true);
         else
             cell.set(x - 1);
         return cell;
     }
 
+    /**
+     * The notion of validity is very relaxed here: e.g., line 222 222 222 will be fine. What saves us is that
+     * elimination step will bring this line into an invalid state on its next turn, so we're just postponing
+     * the solution (we don't want out check for validity to be NP hard)
+     *
+     * @return true if all the cells are non-empty, and each line or block has places for any value;
+     *         false otherwise.
+     */
     public boolean isValid() {
-        return false;
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            BitSet acc = emptyCell();
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                acc.or(task[i][j]);
+            }
+            if (acc.cardinality() < BOARD_SIZE)
+                return false;
+        }
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            BitSet acc = emptyCell();
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                acc.or(task[i][j]);
+            }
+            if (acc.cardinality() < BOARD_SIZE)
+                return false;
+        }
+
+        for (int k = 0; k < BOARD_SIZE; k++) {
+            int ri = BLOCK_SIZE * ((k / BLOCK_SIZE) % BLOCK_SIZE);
+            int rj = BLOCK_SIZE * (k / BLOCK_SIZE);
+            BitSet acc = emptyCell();
+            for (int m = 0; m < BOARD_SIZE; m++) {
+                int i = ri + m % BLOCK_SIZE;
+                int j = rj + m / BLOCK_SIZE;
+                acc.or(task[i][j]);
+            }
+            if (acc.cardinality() < BOARD_SIZE)
+                return false;
+        }
+
+        return true;
+    }
+
+    private BitSet emptyCell() {
+        return new BitSet(BOARD_SIZE);
     }
 
     public boolean isSolved() {
@@ -93,6 +136,8 @@ public class Sudoku {
             System.exit(-1);
         }
 
-        System.out.println(readTask(new FileReader(args[0])).toString());
+        Sudoku sudoku = readTask(new FileReader(args[0]));
+        System.out.println(sudoku.toString());
+        System.out.println("sudoku.isValid() = " + sudoku.isValid());
     }
 }
