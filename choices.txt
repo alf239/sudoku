@@ -1,0 +1,10 @@
+Collection of "design" choices in no particular order collected here for no apparent reason.
+
+1. Testing. TDD is cool, but ties hands way too early
+
+2. Constructor. Constructor does not follow the PHP example, as in Java throwing an exception
+in constructor is considered a bad practice.
+
+3. Command line argument VS resources. For the end user, CLI is better; for testing, resources are handy.
+
+4.
