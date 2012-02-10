@@ -3,6 +3,7 @@ package org.acm.afilippov.sudoku;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.BitSet;
 
 import static java.lang.Math.sqrt;
 
@@ -11,7 +12,7 @@ public class Sudoku {
     public static final int NR_OF_CELLS = BOARD_SIZE * BOARD_SIZE;
     public static final int BLOCK_SIZE = (int) sqrt(BOARD_SIZE);
 
-    private int[][] task = new int[BOARD_SIZE][BOARD_SIZE];
+    private BitSet[][] task = new BitSet[BOARD_SIZE][BOARD_SIZE];
 
     public Sudoku(int[] cells) {
         if (cells.length != NR_OF_CELLS)
@@ -19,11 +20,21 @@ public class Sudoku {
                     + ", which is " + NR_OF_CELLS + " cells");
 
         for (int i = 0, k = 0; i < task.length; i++) {
-            int[] row = task[i];
-            for (int j = 0; j < row.length; j++) {
-                row[j] = cells[k++];
+            BitSet[] row = task[i];
+            for (int j = 0; j < row.length; j++, k++) {
+
+                row[j] = maskFor(cells[k]);
             }
         }
+    }
+
+    private BitSet maskFor(int x) {
+        BitSet cell = new BitSet(BOARD_SIZE);
+        if (x == 0)
+            cell.set(0, BOARD_SIZE - 1, true);
+        else
+            cell.set(x - 1);
+        return cell;
     }
 
     public boolean isValid() {
@@ -31,9 +42,9 @@ public class Sudoku {
     }
 
     public boolean isSolved() {
-        for (int[] row : task) {
-            for (int cell : row) {
-                if (cell == 0)
+        for (BitSet[] row : task) {
+            for (BitSet cell : row) {
+                if (cell.cardinality() > 1)
                     return false;
             }
         }
@@ -43,13 +54,13 @@ public class Sudoku {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < task.length; i++) {
-            int[] row = task[i];
+            BitSet[] row = task[i];
             for (int j = 0; j < row.length; j++) {
-                int cell = row[j];
-                if (cell == 0)
+                BitSet cell = row[j];
+                if (cell.cardinality() > 1)
                     sb.append('_');
                 else
-                    sb.append(cell);
+                    sb.append(cell.nextSetBit(0) + 1);
                 if (isBlockBorder(j))
                     sb.append(" ");
             }
