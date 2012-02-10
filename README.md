@@ -8,52 +8,52 @@ Write a standard Sudoku solver in your favorite language. Once you've done that,
 Here's some PHP code to get you started: (use any language you like)
 
 ```php
+/**
+ * Simple class representing a sudoku puzzle
+ */
+class Sudoku {
+
+	// Array representing our puzzle
+	private $puzzle = array();
+
 	/**
-	 * Simple class representing a sudoku puzzle
+	 * Parses sudoku puzzle file and builds data structure for solving.
+	 * @param  string $file path to file containing sudoku puzzle
 	 */
-	class Sudoku {
-
-		// Array representing our puzzle
-		private $puzzle = array();
-
-		/**
-		 * Parses sudoku puzzle file and builds data structure for solving.
-		 * @param  string $file path to file containing sudoku puzzle
-		 */
-		public function __construct($file) {
-
-		}
-
-		/**
-		 * Solves sudoku puzzle
-		 */
-		public function solve() {
-
-		}
-
-		/**
-		 * You may want or need to create more methods for this class.
-		 */
-
-		/**
-		 * Returns string representation of sudoku puzzle for printing
-		 * @return string
-		 */
-		public function __toString() {
-			return '';
-		}
+	public function __construct($file) {
 
 	}
 
-	if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
-		print "Usage sudoku.php \n"; exit;
+	/**
+	 * Solves sudoku puzzle
+	 */
+	public function solve() {
+
 	}
 
-	$file = $argv[1];
+	/**
+	 * You may want or need to create more methods for this class.
+	 */
 
-	$sudoku = new Sudoku($file);
-	$sudoku->solve();
-	print $sudoku;
+	/**
+	 * Returns string representation of sudoku puzzle for printing
+	 * @return string
+	 */
+	public function __toString() {
+		return '';
+	}
+
+}
+
+if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+	print "Usage sudoku.php \n"; exit;
+}
+
+$file = $argv[1];
+
+$sudoku = new Sudoku($file);
+$sudoku->solve();
+print $sudoku;
 ```
 
 Here's a sample test case:
