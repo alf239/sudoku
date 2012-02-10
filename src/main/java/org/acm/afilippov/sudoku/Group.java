@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class Group implements Iterable<Cell> {
     private final Cell[] cells;
-    private int i = 0;
+    private int c = 0;
 
     public Group(int size) {
         cells = new Cell[size];
@@ -17,7 +17,7 @@ public class Group implements Iterable<Cell> {
     }
 
     public void add(Cell cell) {
-        cells[i++] = cell;
+        cells[c++] = cell;
         cell.join(this);
     }
 
