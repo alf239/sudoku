@@ -1,28 +1,38 @@
 package org.acm.afilippov.sudoku;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Iterator;
-import java.util.List;
 
 public class Group implements Iterable<Cell> {
-    private List<Cell> cells = new ArrayList<Cell>(Sudoku.BLOCK_SIZE);
+    private final Cell[] cells;
+    private int i = 0;
+
+    public Group(int size) {
+        cells = new Cell[size];
+    }
 
     public Iterator<Cell> iterator() {
-        return cells.iterator();
+        return Arrays.asList(cells).iterator();
     }
 
     public void add(Cell cell) {
-        cells.add(cell);
+        cells[i++] = cell;
         cell.join(this);
     }
 
+    public int getSize() {
+        return cells.length;
+    }
+
     public boolean isValid() {
-        BitSet mask = Cell.any().mask();
+        BitSet mask = new BitSet(cells.length);
         for (Cell cell : this) {
+            if (cell == null)
+                return false;
             mask.or(cell.mask());
         }
-        return mask.cardinality() == Sudoku.BOARD_SIZE;
+        return mask.cardinality() == cells.length;
     }
 
     @Override
@@ -30,7 +40,7 @@ public class Group implements Iterable<Cell> {
         StringBuilder sb = new StringBuilder();
         int i = 0;
         for (Cell cell : this) {
-            if (i++ % Sudoku.BLOCK_SIZE == 0)
+            if (i++ % cells.length == 0)
                 sb.append("   ");
             sb.append(cell).append("   ");
         }

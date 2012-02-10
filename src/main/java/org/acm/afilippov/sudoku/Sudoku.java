@@ -8,43 +8,42 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
 
-import static java.lang.Math.sqrt;
-
 public class Sudoku {
-    public static final int BOARD_SIZE = 9;
-    public static final int NR_OF_CELLS = BOARD_SIZE * BOARD_SIZE;
-    public static final int BLOCK_SIZE = (int) sqrt(BOARD_SIZE);
 
-    private Cell[] cells = new Cell[NR_OF_CELLS];
-    private Group[] groups = new Group[BOARD_SIZE * 3];
+    private final Variation v;
+    private final Cell[] cells;
+    private Group[] groups;
 
-    public Sudoku(int[] task) {
-        if (task.length != cells.length)
-            throw new IllegalArgumentException("We expect a board of " + BOARD_SIZE + "x" + BOARD_SIZE + ", "
-                    + "that is, " + NR_OF_CELLS + " cells");
+    public Sudoku(int[] task, Variation variation) {
+        if (task.length != variation.getTotal())
+            throw new IllegalArgumentException("We expect a board of "
+                    + variation.getSize() + "x" + variation.getSize() + ", "
+                    + "that is, " + variation.getTotal() + " cells");
+
+        v = variation;
+        cells = new Cell[variation.getTotal()];
+        groups = new Group[variation.getSize() * 3];
 
         for (int i = 0; i < cells.length; i++) {
-            cells[i] = task[i] == 0 ? Cell.any() : Cell.only(task[i]);
+            cells[i] = task[i] == 0 ? Cell.any(variation) : Cell.only(variation, task[i]);
         }
 
         for (int i = 0; i < groups.length; i++) {
-            groups[i] = new Group();
+            groups[i] = new Group(variation.getSize());
         }
 
         for (int i = 0; i < cells.length; i++) {
-            int row = i / BOARD_SIZE;
-            int col = i % BOARD_SIZE;
-            int block = round(row, BLOCK_SIZE) + col / BLOCK_SIZE;
+            int row = i / v.getSize();
+            int col = i % v.getSize();
+            int block = round(row, v.getRegionSize()) + col / v.getRegionSize();
 
             groups[row].add(cells[i]);
-            groups[BOARD_SIZE + col].add(cells[i]);
-            groups[2 * BOARD_SIZE + block].add(cells[i]);
+            groups[v.getSize() + col].add(cells[i]);
+            groups[2 * variation.getSize() + block].add(cells[i]);
         }
 
-        for (Cell cell : cells) {
-            if (cell.getGroups().size() != 3)
-                throw new IllegalStateException("Invalid number of groups! " + cell);
-        }
+        if (!isValid())
+            throw new IllegalStateException("Invalid task");
     }
 
     public void solve() {
@@ -58,9 +57,11 @@ public class Sudoku {
             works = false;
             for (Strategy strategy : strategies) {
                 while (strategy.apply(this)) {
-                    System.out.println(toString());
-                    System.out.println("\n=============================");
                     works = true;
+
+                    System.out.println(this);
+                    System.out.println("\n");
+                    System.out.println("=============================");
                 }
             }
         } while (works);
@@ -94,16 +95,16 @@ public class Sudoku {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            if (i % BLOCK_SIZE == 0)
+        for (int i = 0; i < v.getSize(); i++) {
+            if (i % v.getRegionSize() == 0)
                 sb.append("\n");
             sb.append(groups[i]).append("\n");
         }
         return sb.toString();
     }
 
-    public static Sudoku readTask(Reader reader) throws IOException {
-        int[] cells = new int[NR_OF_CELLS];
+    public static Sudoku readTask(Reader reader, Variation variation) throws IOException {
+        int[] cells = new int[variation.getTotal()];
         for (int c, i = 0; (c = reader.read()) != -1; ) {
             if (c == '_')
                 cells[i++] = 0;
@@ -114,7 +115,7 @@ public class Sudoku {
             else if (c >= 'A' && c <= 'F')
                 cells[i++] = c + 10 - 'A';
         }
-        return new Sudoku(cells);
+        return new Sudoku(cells, variation);
     }
 
     public static void main(String[] args) throws IOException {
@@ -123,7 +124,7 @@ public class Sudoku {
             System.exit(-1);
         }
 
-        Sudoku sudoku = readTask(new FileReader(args[0]));
+        Sudoku sudoku = readTask(new FileReader(args[0]), Variation.CLASSIC);
         sudoku.solve();
 
         System.out.println(sudoku.toString());

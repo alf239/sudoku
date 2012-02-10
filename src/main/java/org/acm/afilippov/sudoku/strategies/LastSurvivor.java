@@ -35,9 +35,9 @@ public class LastSurvivor implements Strategy {
     }
 
     private int[] countOptions(Group group) {
-        int counts[] = new int[Sudoku.BOARD_SIZE];
+        int counts[] = new int[group.getSize()];
         for (Cell cell : group) {
-            for (int i = 0; i < counts.length; i++)
+            for (int i = 0; i < group.getSize(); i++)
                 if (cell.mask().get(i))
                     counts[i]++;
         }
