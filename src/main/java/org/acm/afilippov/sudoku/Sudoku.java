@@ -28,7 +28,7 @@ public class Sudoku {
         }
 
         for (int i = 0; i < groups.length; i++) {
-            groups[i] = new Group(v.getSize());
+            groups[i] = new Group(v);
         }
 
         for (int i = 0; i < cells.length; i++) {
@@ -59,8 +59,7 @@ public class Sudoku {
                     works = true;
 
                     System.out.println(this);
-                    System.out.println("\n");
-                    System.out.println("=============================");
+                    hbar();
                 }
             }
         } while (works);
@@ -95,9 +94,12 @@ public class Sudoku {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < v.getSize(); i++) {
-            if (i % v.getRegionSize() == 0)
+            if (i != 0) {
                 sb.append("\n");
-            sb.append(groups[i]).append("\n");
+                if (i % v.getRegionSize() == 0)
+                    sb.append("\n");
+            }
+            sb.append(groups[i]);
         }
         return sb.toString();
     }
@@ -123,10 +125,11 @@ public class Sudoku {
         }
 
         Sudoku sudoku = readTask(new FileReader(args[0]), Variation.CLASSIC);
-        sudoku.solve();
 
-        System.out.println(sudoku.toString());
-        System.out.println("sudoku.isSolved() = " + sudoku.isSolved());
+        System.out.println("sudoku = \n" + sudoku);
+        hbar();
+
+        sudoku.solve();
     }
 
     public Iterable<? extends Cell> cells() {
@@ -139,5 +142,9 @@ public class Sudoku {
 
     private static int round(int a, int r) {
         return a - a % r;
+    }
+
+    private static void hbar() {
+        System.out.println("\n=============================\n");
     }
 }
