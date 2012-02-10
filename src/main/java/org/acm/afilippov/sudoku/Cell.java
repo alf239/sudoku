@@ -33,7 +33,7 @@ public class Cell {
 
     public static Cell only(Variation variation, int x) {
         BitSet mask = new BitSet(variation.getSize());
-        mask.set(x - 1);
+        mask.set(x - variation.getBase());
         return new Cell(variation, mask);
     }
 

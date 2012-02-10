@@ -25,7 +25,7 @@ public class Sudoku {
         groups = new Group[variation.getSize() * 3];
 
         for (int i = 0; i < cells.length; i++) {
-            cells[i] = task[i] == 0 ? Cell.any(variation) : Cell.only(variation, task[i]);
+            cells[i] = task[i] == variation.getMissingValue() ? Cell.any(variation) : Cell.only(variation, task[i]);
         }
 
         for (int i = 0; i < groups.length; i++) {
@@ -107,7 +107,7 @@ public class Sudoku {
         int[] cells = new int[variation.getTotal()];
         for (int c, i = 0; (c = reader.read()) != -1; ) {
             if (c == '_')
-                cells[i++] = 0;
+                cells[i++] = variation.getMissingValue();
             else if (c >= '0' && c <= '9')
                 cells[i++] = c - '0';
             else if (c >= 'a' && c <= 'f')

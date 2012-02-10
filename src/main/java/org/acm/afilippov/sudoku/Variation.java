@@ -34,4 +34,8 @@ public enum Variation {
     public int getRegionSize() {
         return region;
     }
+
+    public int getMissingValue() {
+        return -1;
+    }
 }
