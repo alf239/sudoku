@@ -19,15 +19,15 @@ public class HiddenTwins implements Strategy {
 
                 Set<Cell> aonly = new HashSet<Cell>(a.cells());
                 Set<Cell> both = new HashSet<Cell>(a.cells());
-                Set<Cell> bonly = new HashSet<Cell>(b.cells());
 
-                both.retainAll(bonly);
+                both.retainAll(b.cells());
                 aonly.removeAll(both);
 
                 BitSet aomask = or(aonly);
                 BitSet abmask = or(both);
                 abmask.andNot(aomask);
                 if (abmask.cardinality() > 0) {
+                    Set<Cell> bonly = new HashSet<Cell>(b.cells());
                     bonly.removeAll(both);
                     for (Cell c : bonly) {
                         flag |= SimpleElimination.filter(abmask, c.mask());
