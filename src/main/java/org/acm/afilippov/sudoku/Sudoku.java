@@ -52,14 +52,18 @@ public class Sudoku {
         };
 
         boolean works;
+        outer:
         do {
             works = false;
             for (Strategy strategy : strategies) {
-                while (strategy.apply(this)) {
+                if (strategy.apply(this)) {
                     works = true;
 
+                    System.out.println("strategy = " + strategy);
+                    System.out.println();
                     System.out.println(this);
                     hbar();
+                    continue outer;
                 }
             }
         } while (works);
@@ -81,14 +85,6 @@ public class Sudoku {
             if (!group.isValid())
                 return false;
         return true;
-    }
-
-    public boolean isSolved() {
-        for (Cell cell : cells)
-            if (!cell.isDecided())
-                return false;
-
-        return isValid();
     }
 
     public String toString() {
