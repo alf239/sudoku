@@ -50,17 +50,17 @@ public class Sudoku {
                     sb.append('_');
                 else
                     sb.append(cell);
-                if (isCellBorder(j))
+                if (isBlockBorder(j))
                     sb.append(" ");
             }
             sb.append("\n");
-            if (isCellBorder(i))
+            if (isBlockBorder(i))
                 sb.append("\n");
         }
         return sb.toString();
     }
 
-    private boolean isCellBorder(int i) {
+    private boolean isBlockBorder(int i) {
         return i != BOARD_SIZE - 1 &&
                 i % BLOCK_SIZE == BLOCK_SIZE - 1;
     }
