@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import static java.lang.Integer.toHexString;
+
 public class Cell {
     private BitSet mask;
     private List<Group> groups = new ArrayList<Group>(3);
@@ -40,9 +42,17 @@ public class Cell {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < Sudoku.BOARD_SIZE; i++) {
-            sb.append(mask.get(i) ? (i + 1) : ".");
+            sb.append(mask.get(i) ? toString(i + 1) : ".");
         }
         return sb.toString();
+    }
+
+    private String toString(int i) {
+        if (i < 15)
+            return toHexString(i);
+        if (i < 10 + ('z' - 'a'))
+            return Character.toString((char)(i - 10 + 'a'));
+        return "*";
     }
 
     public boolean isValid() {

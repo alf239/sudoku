@@ -47,6 +47,25 @@ public class Sudoku {
         }
     }
 
+    public void solve() {
+        Strategy[] strategies = {
+                new SimpleElimination(),
+                new LastSurvivor()
+        };
+
+        boolean works;
+        do {
+            works = false;
+            for (Strategy strategy : strategies) {
+                while (strategy.apply(this)) {
+                    System.out.println(toString());
+                    System.out.println("\n=============================");
+                    works = true;
+                }
+            }
+        } while (works);
+    }
+
     /**
      * The notion of validity is very relaxed here: e.g., line 222 222 222 will be fine. What saves us is that
      * elimination step will bring this line into an invalid state on its next turn, so we're just postponing
@@ -90,6 +109,10 @@ public class Sudoku {
                 cells[i++] = 0;
             else if (c >= '0' && c <= '9')
                 cells[i++] = c - '0';
+            else if (c >= 'a' && c <= 'f')
+                cells[i++] = c + 10 - 'a';
+            else if (c >= 'A' && c <= 'F')
+                cells[i++] = c + 10 - 'A';
         }
         return new Sudoku(cells);
     }
@@ -101,22 +124,7 @@ public class Sudoku {
         }
 
         Sudoku sudoku = readTask(new FileReader(args[0]));
-        Strategy[] strategies = {
-                new SimpleElimination(),
-                new LastSurvivor()
-        };
-
-        boolean works;
-        do {
-            works = false;
-            for (Strategy strategy : strategies) {
-                while (strategy.apply(sudoku)) {
-                    System.out.println(sudoku.toString());
-                    System.out.println("\n=============================");
-                    works = true;
-                }
-            }
-        } while (works);
+        sudoku.solve();
 
         System.out.println(sudoku.toString());
         System.out.println("sudoku.isSolved() = " + sudoku.isSolved());
