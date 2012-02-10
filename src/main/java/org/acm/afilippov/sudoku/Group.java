@@ -1,42 +1,21 @@
 package org.acm.afilippov.sudoku;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Iterator;
+import java.util.List;
 
-public abstract class Group implements Iterable<Cell> {
-    protected Sudoku sudoku;
+public class Group implements Iterable<Cell> {
+    private List<Cell> cells = new ArrayList<Cell>(Sudoku.BLOCK_SIZE);
 
     public Iterator<Cell> iterator() {
-        return new Iterator<Cell>() {
-            int i = 0;
-
-            public boolean hasNext() {
-                return i < Sudoku.BOARD_SIZE;
-            }
-
-            public Cell next() {
-                return Group.this.get(i++);
-            }
-
-            public void remove() {
-                throw new NotImplementedException();
-            }
-        };
+        return cells.iterator();
     }
 
-    protected Group(Sudoku sudoku) {
-        this.sudoku = sudoku;
+    public void add(Cell cell) {
+        cells.add(cell);
+        cell.join(this);
     }
-
-    protected void init() {
-        for (Cell cell : this) {
-            cell.join(this);
-        }
-    }
-
-    protected abstract Cell get(int i);
 
     public boolean isValid() {
         BitSet mask = Cell.any().mask();

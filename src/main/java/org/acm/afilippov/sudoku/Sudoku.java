@@ -1,8 +1,5 @@
 package org.acm.afilippov.sudoku;
 
-import org.acm.afilippov.sudoku.groups.Block;
-import org.acm.afilippov.sudoku.groups.Column;
-import org.acm.afilippov.sudoku.groups.Row;
 import org.acm.afilippov.sudoku.strategies.LastSurvivor;
 import org.acm.afilippov.sudoku.strategies.SimpleElimination;
 
@@ -21,25 +18,29 @@ public class Sudoku {
     private Cell[] cells = new Cell[NR_OF_CELLS];
     private Group[] groups = new Group[BOARD_SIZE * 3];
 
-    public Sudoku(int[] cells) {
-        if (cells.length != NR_OF_CELLS)
+    public Sudoku(int[] task) {
+        if (task.length != NR_OF_CELLS)
             throw new IllegalArgumentException("We expect a board of " + BOARD_SIZE + "x" + BOARD_SIZE
                     + ", which is " + NR_OF_CELLS + " cells");
 
         for (int i = 0; i < NR_OF_CELLS; i++) {
-            this.cells[i] = cells[i] == 0 ? Cell.any() : Cell.only(cells[i]);
-        }
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            groups[i] = new Row(this, i);
-        }
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            groups[BOARD_SIZE + i] = new Column(this, i);
-        }
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            groups[2 * BOARD_SIZE + i] = new Block(this, i);
+            cells[i] = task[i] == 0 ? Cell.any() : Cell.only(task[i]);
         }
 
-        for (Cell cell : this.cells) {
+        for (int i = 0; i < groups.length; i++) {
+            groups[i] = new Group();
+        }
+
+        for (int i = 0; i < cells.length; i++) {
+            int row = i / BOARD_SIZE;
+            int col = i % BOARD_SIZE;
+
+            groups[row].add(cells[i]);
+            groups[BOARD_SIZE + col].add(cells[i]);
+            groups[2 * BOARD_SIZE + row / BLOCK_SIZE * BLOCK_SIZE + col / BLOCK_SIZE].add(cells[i]);
+        }
+
+        for (Cell cell : cells) {
             if (cell.getGroups().size() != 3)
                 throw new IllegalStateException("Invalid number of groups!" + cell);
         }
