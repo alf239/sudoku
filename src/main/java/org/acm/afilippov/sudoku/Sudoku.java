@@ -5,10 +5,9 @@ import org.acm.afilippov.sudoku.strategies.EliminationRule;
 import org.acm.afilippov.sudoku.strategies.IntersectionRule;
 import org.acm.afilippov.sudoku.strategies.OnlyPlaceRule;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Arrays;
+
+import static org.acm.afilippov.sudoku.Utils.round;
 
 public class Sudoku {
 
@@ -26,7 +25,7 @@ public class Sudoku {
         groups = new Group[v.getSize() * 3];
 
         for (int i = 0; i < cells.length; i++) {
-            cells[i] = task[i] == v.getMissingValue() ? Cell.any(v) : Cell.only(v, task[i]);
+            cells[i] = Cell.forValue(v, task[i]);
         }
 
         for (int i = 0; i < groups.length; i++) {
@@ -34,13 +33,13 @@ public class Sudoku {
         }
 
         for (int i = 0; i < cells.length; i++) {
-            int row = i / v.getSize();
-            int col = i % v.getSize();
-            int block = round(row, v.getRegionSize()) + col / v.getRegionSize();
+            final int row = i / v.getSize();
+            final int col = i % v.getSize();
+            final int block = round(row, v.getRegionSize()) + col / v.getRegionSize();
 
             groups[row].add(cells[i]);
-            groups[v.getSize() + col].add(cells[i]);
-            groups[2 * v.getSize() + block].add(cells[i]);
+            groups[col + v.getSize()].add(cells[i]);
+            groups[block + 2 * v.getSize()].add(cells[i]);
         }
 
         if (!isValid())
@@ -66,7 +65,7 @@ public class Sudoku {
                     System.out.println("strategy = " + strategy);
                     System.out.println();
                     System.out.println(this);
-                    hbar();
+                    Utils.hbar();
                     if (isSolved())
                         return;
                     continue outer;
@@ -110,37 +109,7 @@ public class Sudoku {
         return sb.toString();
     }
 
-    public static Sudoku readTask(Reader reader, Variation variation) throws IOException {
-        int[] cells = new int[variation.getTotal()];
-        for (int c, i = 0; (c = reader.read()) != -1; ) {
-            if (c == '_')
-                cells[i++] = variation.getMissingValue();
-            else {
-                int digit = Character.digit(c, Character.MAX_RADIX);
-                if (digit != -1)
-                    cells[i++] = digit;
-            }
-        }
-        return new Sudoku(cells, variation);
-    }
-
-    public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.out.println("Usage: java org.acm.afilippov.sudoku.Sudoku <filename>\n\n");
-            System.exit(-1);
-        }
-
-        Sudoku sudoku = readTask(new FileReader(args[0]), Variation.CLASSIC);
-
-        System.out.println("sudoku = \n" + sudoku);
-        hbar();
-
-        sudoku.solve();
-
-        System.out.println("sudoku.cardinality() = " + sudoku.cardinality());
-    }
-
-    private long cardinality() {
+    long cardinality() {
         long result = 1;
         for (Cell c : cells)
             result *= c.cardinality();
@@ -153,14 +122,6 @@ public class Sudoku {
 
     public Iterable<? extends Group> groups() {
         return Arrays.asList(groups);
-    }
-
-    private static int round(int a, int r) {
-        return a - a % r;
-    }
-
-    public static void hbar() {
-        System.out.println("\n=============================\n");
     }
 
     public int size() {

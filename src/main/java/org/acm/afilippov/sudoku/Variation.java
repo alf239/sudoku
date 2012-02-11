@@ -12,11 +12,21 @@ public enum Variation {
     private int total;
     private int region;
 
+    private final int maskForAny;
+
     Variation(int size, int base) {
         this.size = size;
         this.base = base;
         total = size * size;
         region = (int) sqrt(size);
+        maskForAny = -1 >>> (32 - size);
+    }
+
+    int maskFor(int value) {
+        if (value == getMissingValue())
+            return maskForAny;
+        else
+            return 1 << (value - getBase());
     }
 
     public int getSize() {

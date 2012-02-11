@@ -3,6 +3,7 @@ package org.acm.afilippov.sudoku.strategies;
 import org.acm.afilippov.sudoku.Cell;
 import org.acm.afilippov.sudoku.Strategy;
 import org.acm.afilippov.sudoku.Sudoku;
+import org.acm.afilippov.sudoku.Utils;
 
 public class BruteForceRule implements Strategy {
 
@@ -21,7 +22,7 @@ public class BruteForceRule implements Strategy {
 
             System.out.println("Trying " + cell + "\n\n");
             System.out.println(sudoku);
-            Sudoku.hbar();
+            Utils.hbar();
 
             sudoku.solve();
 

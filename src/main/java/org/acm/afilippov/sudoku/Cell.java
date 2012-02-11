@@ -14,9 +14,13 @@ public class Cell {
     private final Group[] groups = new Group[3];
     private int g = 0;
 
-    private Cell(Variation variation, int mask) {
+    private Cell(Variation variation, int value) {
         this.variation = variation;
-        this.mask = mask;
+        this.mask = variation.maskFor(value);
+    }
+
+    static Cell forValue(Variation v, int value) {
+        return new Cell(v, value);
     }
 
     public boolean filter(int drop) {
@@ -33,16 +37,6 @@ public class Cell {
         return Arrays.asList(groups);
     }
 
-    public static Cell any(Variation variation) {
-        int mask = -1 >>> (32 - variation.getSize());
-        return new Cell(variation, mask);
-    }
-
-    public static Cell only(Variation variation, int x) {
-        int mask = 1 << (x - variation.getBase());
-        return new Cell(variation, mask);
-    }
-
     public boolean isDecided() {
         return bitCount(mask) == 1;
     }
@@ -56,7 +50,7 @@ public class Cell {
         return sb.toString();
     }
 
-    private String toString(int i) {
+    private static String toString(int i) {
         if (i < 0)
             throw new IllegalArgumentException("Negative digits are not allowed");
         if (i < Character.MAX_RADIX)
