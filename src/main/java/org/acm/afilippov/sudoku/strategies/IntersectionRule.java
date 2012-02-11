@@ -8,6 +8,8 @@ import org.acm.afilippov.sudoku.Sudoku;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.acm.afilippov.sudoku.Group.maskDisjunction;
+
 public class IntersectionRule implements Strategy {
     public boolean apply(Sudoku sudoku) {
         boolean flag = false;
@@ -22,8 +24,8 @@ public class IntersectionRule implements Strategy {
                 both.retainAll(b.cells());
                 aonly.removeAll(both);
 
-                int aomask = or(aonly);
-                int abmask = or(both);
+                int aomask = maskDisjunction(aonly);
+                int abmask = maskDisjunction(both);
                 abmask &= ~aomask;
                 if (abmask != 0) {
                     Set<Cell> bonly = new HashSet<Cell>(b.cells());
@@ -35,13 +37,5 @@ public class IntersectionRule implements Strategy {
             }
         }
         return flag;
-    }
-
-    private static int or(Set<Cell> cells) {
-        int result = 0;
-        for (Cell cell : cells) {
-            result |= cell.mask();
-        }
-        return result;
     }
 }

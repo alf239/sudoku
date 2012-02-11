@@ -60,11 +60,7 @@ public class Cell {
     }
 
     public boolean isValid() {
-        for (Group group : groups) {
-            if (group == null)
-                return false;
-        }
-        return bitCount(mask) > 0;
+        return mask != 0;
     }
 
     public int mask() {

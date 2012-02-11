@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
+import static java.lang.Integer.bitCount;
+
 public class Group implements Iterable<Cell> {
     private final Variation v;
     private final Cell[] cells;
@@ -28,13 +30,7 @@ public class Group implements Iterable<Cell> {
     }
 
     public boolean isValid() {
-        int mask = 0;
-        for (Cell cell : this) {
-            if (cell == null)
-                return false;
-            mask |= cell.mask();
-        }
-        return Integer.bitCount(mask) == cells.length;
+        return bitCount(maskDisjunction(this)) == cells.length;
     }
 
     @Override
@@ -70,5 +66,13 @@ public class Group implements Iterable<Cell> {
 
     public Collection<? extends Cell> cells() {
         return Arrays.asList(cells);
+    }
+
+    public static int maskDisjunction(Iterable<Cell> cells) {
+        int result = 0;
+        for (Cell cell : cells) {
+            result |= cell.mask();
+        }
+        return result;
     }
 }
