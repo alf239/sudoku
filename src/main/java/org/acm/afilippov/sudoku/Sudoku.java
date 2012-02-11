@@ -7,8 +7,6 @@ import org.acm.afilippov.sudoku.strategies.OnlyPlaceRule;
 
 import java.util.Arrays;
 
-import static org.acm.afilippov.sudoku.Utils.round;
-
 public class Sudoku {
 
     private final Variation v;
@@ -35,7 +33,7 @@ public class Sudoku {
         for (int i = 0; i < cells.length; i++) {
             final int row = i / v.getSize();
             final int col = i % v.getSize();
-            final int block = round(row, v.getRegionSize()) + col / v.getRegionSize();
+            final int block = v.getRegionSize() * (row / v.getRegionSize()) + col / v.getRegionSize();
 
             groups[row].add(cells[i]);
             groups[col + v.getSize()].add(cells[i]);

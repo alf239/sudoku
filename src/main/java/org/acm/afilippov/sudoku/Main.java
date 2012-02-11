@@ -26,18 +26,22 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         if (args.length != 2) {
-            System.out.println("Usage: java org.acm.afilippov.sudoku.Main <filename> <variation>\n\n");
+            System.out.println("Usage: java org.acm.afilippov.sudoku.Main <filename> <variation>");
+            System.out.println();
+            System.out.println("Where  <filename>  is the file to read tasks from");
+            System.out.println("       <variation> is either CLASSIC or SUPER4X4");
+            System.out.println();
             System.exit(-1);
         }
 
         Sudoku sudoku = readTask(new FileReader(args[0]), Variation.valueOf(args[1].toUpperCase()));
 
-        System.out.println("task = \n" + sudoku.result());
+        System.out.println("task:\n" + sudoku.result());
         System.out.println("\n");
 
         sudoku.solve();
 
-        System.out.println("result = \n" + sudoku.result());
+        System.out.println("result:\n" + sudoku.result());
     }
 
 }
