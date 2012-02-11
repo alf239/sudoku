@@ -3,8 +3,8 @@ package org.acm.afilippov.sudoku;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 
+import static org.acm.afilippov.sudoku.BoardLoader.readSudoku;
 import static org.acm.afilippov.sudoku.Variation.CLASSIC;
 import static org.acm.afilippov.sudoku.Variation.SUPER4X4;
 import static org.junit.Assert.assertTrue;
@@ -57,16 +57,5 @@ public class TestSampleBoards {
         Sudoku sudoku = readSudoku("super4x4.txt", SUPER4X4);
         sudoku.solve();
         assertTrue(sudoku.isSolved());
-    }
-
-    private Sudoku readSudoku(final String filename, final Variation variation) throws IOException {
-        InputStreamReader reader = null;
-        try {
-            reader = new InputStreamReader(getClass().getResourceAsStream("/" + filename));
-            return Main.readTask(reader, variation);
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
     }
 }
