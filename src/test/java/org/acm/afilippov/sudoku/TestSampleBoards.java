@@ -12,65 +12,54 @@ import static org.junit.Assert.assertTrue;
 public class TestSampleBoards {
     @Test
     public void sampleTaskBySearchSpring() throws IOException {
-        Sudoku sudoku = classic("tasks.txt");
-        sudoku.solve();
-        assertTrue(sudoku.isSolved());
+        trySolving(classic("tasks.txt"));
     }
 
     @Test
     public void hardTask() throws IOException {
-        Sudoku sudoku = classic("hard.txt");
-        sudoku.solve();
-        assertTrue(sudoku.isSolved());
+        trySolving(classic("hard.txt"));
     }
 
     @Test
     public void hardTask2() throws IOException {
-        Sudoku sudoku = classic("hard2.txt");
-        sudoku.solve();
-        assertTrue(sudoku.isSolved());
+        trySolving(classic("hard2.txt"));
     }
 
     @Test
     public void hardTask3() throws IOException {
-        Sudoku sudoku = classic("hard3.txt");
-        sudoku.solve();
-        assertTrue(sudoku.isSolved());
+        trySolving(classic("hard3.txt"));
     }
 
     @Test
     public void evilTask() throws IOException {
-        Sudoku sudoku = classic("evil.txt");
-        sudoku.solve();
-        assertTrue(sudoku.isSolved());
+        trySolving(classic("evil.txt"));
     }
 
     @Test
     public void evilTask2() throws IOException {
-        Sudoku sudoku = classic("evil2.txt");
-        sudoku.solve();
-        assertTrue(sudoku.isSolved());
+        trySolving(classic("evil2.txt"));
     }
 
     @Test
     public void diabolicalTask() throws IOException {
-        Sudoku sudoku = classic("diabolical.txt");
-        sudoku.solve();
-        assertTrue(sudoku.isSolved());
+        trySolving(classic("diabolical.txt"));
     }
 
     @Test
     public void super4X4() throws IOException {
-        Sudoku sudoku = super4x4("super4x4.txt");
+        trySolving(super4x4("super4x4.txt"));
+    }
+
+    private static void trySolving(Sudoku sudoku) {
         sudoku.solve();
         assertTrue(sudoku.isSolved());
     }
 
-    private Sudoku classic(final String filename) throws IOException {
+    private static Sudoku classic(final String filename) throws IOException {
         return readSudoku(filename, CLASSIC);
     }
 
-    private Sudoku super4x4(final String filename) throws IOException {
+    private static Sudoku super4x4(final String filename) throws IOException {
         return readSudoku(filename, SUPER4X4);
     }
 }
