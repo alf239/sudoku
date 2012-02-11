@@ -8,7 +8,7 @@ import org.acm.afilippov.sudoku.Sudoku;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HiddenTwins implements Strategy {
+public class IntersectionRule implements Strategy {
     public boolean apply(Sudoku sudoku) {
         boolean flag = false;
         for (Group a : sudoku.groups()) {

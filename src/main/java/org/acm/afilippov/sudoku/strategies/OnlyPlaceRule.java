@@ -5,7 +5,7 @@ import org.acm.afilippov.sudoku.Group;
 import org.acm.afilippov.sudoku.Strategy;
 import org.acm.afilippov.sudoku.Sudoku;
 
-public class LastSurvivor implements Strategy {
+public class OnlyPlaceRule implements Strategy {
     public boolean apply(Sudoku sudoku) {
         boolean flag = false;
         for (Group group : sudoku.groups()) {

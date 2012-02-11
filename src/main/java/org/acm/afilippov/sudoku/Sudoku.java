@@ -1,8 +1,8 @@
 package org.acm.afilippov.sudoku;
 
-import org.acm.afilippov.sudoku.strategies.HiddenTwins;
-import org.acm.afilippov.sudoku.strategies.LastSurvivor;
-import org.acm.afilippov.sudoku.strategies.SimpleElimination;
+import org.acm.afilippov.sudoku.strategies.EliminationRule;
+import org.acm.afilippov.sudoku.strategies.IntersectionRule;
+import org.acm.afilippov.sudoku.strategies.OnlyPlaceRule;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -48,9 +48,9 @@ public class Sudoku {
 
     public void solve() {
         Strategy[] strategies = {
-                new SimpleElimination(),
-                new LastSurvivor(),
-                new HiddenTwins()
+                new EliminationRule(),
+                new OnlyPlaceRule(),
+                new IntersectionRule()
         };
 
         boolean works;

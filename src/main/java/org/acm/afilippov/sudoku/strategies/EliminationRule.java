@@ -5,7 +5,7 @@ import org.acm.afilippov.sudoku.Group;
 import org.acm.afilippov.sudoku.Strategy;
 import org.acm.afilippov.sudoku.Sudoku;
 
-public class SimpleElimination implements Strategy {
+public class EliminationRule implements Strategy {
     public boolean apply(Sudoku sudoku) {
         boolean flag = false;
         for (Cell cell : sudoku.cells()) {
