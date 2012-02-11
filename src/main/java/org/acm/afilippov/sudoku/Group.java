@@ -53,6 +53,21 @@ public class Group implements Iterable<Cell> {
         return sb.toString();
     }
 
+    public String result() {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for (Cell cell : this) {
+            if (i != 0) {
+                sb.append(" ");
+                if (i % v.getRegionSize() == 0)
+                    sb.append(" ");
+            }
+            sb.append(cell.result());
+            i++;
+        }
+        return sb.toString();
+    }
+
     public Collection<? extends Cell> cells() {
         return Arrays.asList(cells);
     }

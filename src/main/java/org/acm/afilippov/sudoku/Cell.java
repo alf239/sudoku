@@ -43,6 +43,14 @@ public class Cell {
         return sb.toString();
     }
 
+    public String result() {
+        if (isDecided())
+            return toString(Integer.numberOfTrailingZeros(mask) + variation.getBase());
+        if (bitCount(mask) == variation.getSize())
+            return "_";
+        return "?";
+    }
+
     private static String toString(int i) {
         if (i < 0)
             throw new IllegalArgumentException("Negative digits are not allowed");

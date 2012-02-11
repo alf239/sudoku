@@ -32,12 +32,12 @@ public class Main {
 
         Sudoku sudoku = readTask(new FileReader(args[0]), Variation.valueOf(args[1].toUpperCase()));
 
-        System.out.println("sudoku = \n" + sudoku);
-        Utils.hbar();
+        System.out.println("task = \n" + sudoku.result());
+        System.out.println("\n");
 
         sudoku.solve();
 
-        System.out.println("sudoku.cardinality() = " + sudoku.cardinality());
+        System.out.println("result = \n" + sudoku.result());
     }
 
 }

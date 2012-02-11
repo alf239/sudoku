@@ -62,12 +62,9 @@ public class Sudoku {
                 if (strategy.apply(this)) {
                     works = true;
 
-                    System.out.println("strategy = " + strategy);
-                    System.out.println();
-                    System.out.println(this);
-                    Utils.hbar();
                     if (isSolved())
                         return;
+
                     continue outer;
                 }
             }
@@ -105,6 +102,19 @@ public class Sudoku {
                     sb.append("\n");
             }
             sb.append(groups[i]);
+        }
+        return sb.toString();
+    }
+
+    public String result() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < v.getSize(); i++) {
+            if (i != 0) {
+                sb.append("\n");
+                if (i % v.getRegionSize() == 0)
+                    sb.append("\n");
+            }
+            sb.append(groups[i].result());
         }
         return sb.toString();
     }
