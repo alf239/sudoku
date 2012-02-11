@@ -1,20 +1,26 @@
 package org.acm.afilippov.sudoku;
 
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.List;
 
+import static java.lang.Integer.bitCount;
 import static java.lang.Integer.toHexString;
 
 public class Cell {
     private final Variation variation;
-    private final BitSet mask;
+    private int mask;
     private final Group[] groups = new Group[3];
     private int g = 0;
 
-    private Cell(Variation variation, BitSet mask) {
+    private Cell(Variation variation, int mask) {
         this.variation = variation;
         this.mask = mask;
+    }
+
+    public boolean filter(int drop) {
+        int old = mask;
+        mask &= ~drop;
+        return mask() != old;
     }
 
     protected void join(Group group) {
@@ -26,26 +32,24 @@ public class Cell {
     }
 
     public static Cell any(Variation variation) {
-        BitSet mask = new BitSet(variation.getSize());
-        mask.set(0, variation.getSize());
+        int mask = -1 >>> (32 - variation.getSize());
         return new Cell(variation, mask);
     }
 
     public static Cell only(Variation variation, int x) {
-        BitSet mask = new BitSet(variation.getSize());
-        mask.set(x - variation.getBase());
+        int mask = 1 << (x - variation.getBase());
         return new Cell(variation, mask);
     }
 
     public boolean isDecided() {
-        return mask.cardinality() == 1;
+        return bitCount(mask) == 1;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < variation.getSize(); i++) {
-            sb.append(mask.get(i) ? toString(i + variation.getBase()) : ".");
+            sb.append(allows(i) ? toString(i + variation.getBase()) : ".");
         }
         return sb.toString();
     }
@@ -63,14 +67,18 @@ public class Cell {
             if (group == null)
                 return false;
         }
-        return mask.cardinality() > 0;
+        return bitCount(mask) > 0;
     }
 
-    public BitSet mask() {
+    public int mask() {
         return mask;
     }
 
     public int cardinality() {
-        return mask.cardinality();
+        return bitCount(mask);
+    }
+
+    public boolean allows(int i) {
+        return (mask & (1 << i)) != 0;
     }
 }

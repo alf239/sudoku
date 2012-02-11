@@ -5,7 +5,6 @@ import org.acm.afilippov.sudoku.Group;
 import org.acm.afilippov.sudoku.Strategy;
 import org.acm.afilippov.sudoku.Sudoku;
 
-import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,14 +22,14 @@ public class HiddenTwins implements Strategy {
                 both.retainAll(b.cells());
                 aonly.removeAll(both);
 
-                BitSet aomask = or(aonly);
-                BitSet abmask = or(both);
-                abmask.andNot(aomask);
-                if (abmask.cardinality() > 0) {
+                int aomask = or(aonly);
+                int abmask = or(both);
+                abmask &= ~aomask;
+                if (abmask != 0) {
                     Set<Cell> bonly = new HashSet<Cell>(b.cells());
                     bonly.removeAll(both);
                     for (Cell c : bonly) {
-                        flag |= SimpleElimination.filter(abmask, c.mask());
+                        flag |= c.filter(abmask);
                     }
                 }
             }
@@ -38,10 +37,10 @@ public class HiddenTwins implements Strategy {
         return flag;
     }
 
-    private static BitSet or(Set<Cell> cells) {
-        BitSet result = new BitSet();
+    private static int or(Set<Cell> cells) {
+        int result = 0;
         for (Cell cell : cells) {
-            result.or(cell.mask());
+            result |= cell.mask();
         }
         return result;
     }

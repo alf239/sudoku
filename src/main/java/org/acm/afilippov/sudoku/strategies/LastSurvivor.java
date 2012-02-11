@@ -21,12 +21,11 @@ public class LastSurvivor implements Strategy {
 
     private boolean selectSurvivor(Group group, int i) {
         for (Cell cell : group) {
-            if (cell.mask().get(i)) {
+            if (cell.allows(i)) {
                 if (cell.isDecided())
                     return false;
 
-                cell.mask().clear();
-                cell.mask().set(i);
+                cell.filter(~(1 << i));
                 return true;
             }
         }
@@ -37,9 +36,11 @@ public class LastSurvivor implements Strategy {
     private int[] countOptions(Group group) {
         int counts[] = new int[group.getSize()];
         for (Cell cell : group) {
-            for (int i = 0; i < group.getSize(); i++)
-                if (cell.mask().get(i))
+            for (int i = 0, m = 1; i < group.getSize(); i++) {
+                if ((cell.mask() & m) != 0)
                     counts[i]++;
+                m <<= 1;
+            }
         }
         return counts;
     }

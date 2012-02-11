@@ -1,7 +1,6 @@
 package org.acm.afilippov.sudoku;
 
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -29,13 +28,13 @@ public class Group implements Iterable<Cell> {
     }
 
     public boolean isValid() {
-        BitSet mask = new BitSet(cells.length);
+        int mask = 0;
         for (Cell cell : this) {
             if (cell == null)
                 return false;
-            mask.or(cell.mask());
+            mask |= cell.mask();
         }
-        return mask.cardinality() == cells.length;
+        return Integer.bitCount(mask) == cells.length;
     }
 
     @Override
