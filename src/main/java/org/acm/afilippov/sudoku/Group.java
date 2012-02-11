@@ -9,7 +9,7 @@ public class Group implements Iterable<Cell> {
     private final Cell[] cells;
     private int c = 0;
 
-    public Group(Variation v) {
+    Group(Variation v) {
         this.v = v;
         cells = new Cell[v.getSize()];
     }

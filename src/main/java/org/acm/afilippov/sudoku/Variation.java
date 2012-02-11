@@ -6,11 +6,11 @@ public enum Variation {
     CLASSIC(9, 1),
     SUPER4X4(16, 0);
 
-    private int size;
-    private int base;
+    private final int size;
+    private final int base;
 
-    private int total;
-    private int region;
+    private final int total;
+    private final int region;
 
     private final int maskForAny;
 

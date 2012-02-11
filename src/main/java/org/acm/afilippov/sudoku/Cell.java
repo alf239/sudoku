@@ -1,9 +1,6 @@
 package org.acm.afilippov.sudoku;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Integer.bitCount;
 
@@ -14,13 +11,9 @@ public class Cell {
     private final Group[] groups = new Group[3];
     private int g = 0;
 
-    private Cell(Variation variation, int value) {
+    Cell(Variation variation, int value) {
         this.variation = variation;
         this.mask = variation.maskFor(value);
-    }
-
-    static Cell forValue(Variation v, int value) {
-        return new Cell(v, value);
     }
 
     public boolean filter(int drop) {
@@ -29,7 +22,7 @@ public class Cell {
         return mask != old;
     }
 
-    protected void join(Group group) {
+    void join(Group group) {
         groups[g++] = group;
     }
 
@@ -76,6 +69,15 @@ public class Cell {
 
     public boolean allows(int i) {
         return (mask & (1 << i)) != 0;
+    }
+
+    public List<Integer> allowedValues() {
+        List<Integer> result = new ArrayList<Integer>(bitCount(mask));
+        for (int i = 0; i < variation.getSize(); i++) {
+            if (allows(i))
+                result.add(i);
+        }
+        return result;
     }
 
     public void set(int i) {

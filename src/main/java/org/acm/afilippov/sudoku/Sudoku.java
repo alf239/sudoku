@@ -25,7 +25,7 @@ public class Sudoku {
         groups = new Group[v.getSize() * 3];
 
         for (int i = 0; i < cells.length; i++) {
-            cells[i] = Cell.forValue(v, task[i]);
+            cells[i] = new Cell(v, task[i]);
         }
 
         for (int i = 0; i < groups.length; i++) {
@@ -122,10 +122,6 @@ public class Sudoku {
 
     public Iterable<? extends Group> groups() {
         return Arrays.asList(groups);
-    }
-
-    public int size() {
-        return v.getSize();
     }
 
     public void checkpoint() {

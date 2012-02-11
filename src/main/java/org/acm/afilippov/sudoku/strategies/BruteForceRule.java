@@ -12,15 +12,13 @@ public class BruteForceRule implements Strategy {
         if (cell == null)
             return false;
 
-        for (int i = 0; i < sudoku.size(); i++) {
-            if (!cell.allows(i))
-                continue;
+        for (int i : cell.allowedValues()) {
+            sudoku.checkpoint();
 
             System.out.println("Cell:  " + cell);
-            sudoku.checkpoint();
             cell.set(i);
-
             System.out.println("Trying " + cell + "\n\n");
+
             System.out.println(sudoku);
             Utils.hbar();
 
@@ -30,7 +28,7 @@ public class BruteForceRule implements Strategy {
                 return true;
 
             if (sudoku.isValid())
-                throw new IllegalStateException("We should've brute forced it further!");
+                throw new IllegalStateException("We should have brute forced it further!");
 
             System.out.println("Wrong way, rolling back\n");
             sudoku.rollback();
