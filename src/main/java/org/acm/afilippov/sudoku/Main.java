@@ -34,14 +34,21 @@ public class Main {
             System.exit(-1);
         }
 
-        Sudoku sudoku = readTask(new FileReader(args[0]), Variation.valueOf(args[1].toUpperCase()));
+        FileReader reader = null;
+        try {
+            reader = new FileReader(args[0]);
+            Sudoku sudoku = readTask(reader, Variation.valueOf(args[1].toUpperCase()));
 
-        System.out.println("task:\n" + sudoku.result());
-        System.out.println("\n");
+            System.out.println("task:\n" + sudoku.result());
+            System.out.println("\n");
 
-        sudoku.solve();
+            sudoku.solve();
 
-        System.out.println("result:\n" + sudoku.result());
+            System.out.println("result:\n" + sudoku.result());
+        } finally {
+            if (reader != null)
+                reader.close();
+        }
     }
 
 }
