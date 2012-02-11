@@ -5,9 +5,19 @@ import org.acm.afilippov.sudoku.strategies.EliminationRule;
 import org.acm.afilippov.sudoku.strategies.IntersectionRule;
 import org.acm.afilippov.sudoku.strategies.OnlyPlaceRule;
 
-import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 public class Sudoku {
+    public static final List<Strategy> STRATEGIES =
+            unmodifiableList(asList(
+                    new EliminationRule(),
+                    new OnlyPlaceRule(),
+                    new IntersectionRule(),
+                    new BruteForceRule()
+            ));
 
     private final Variation v;
     private final Cell[] cells;
@@ -45,18 +55,11 @@ public class Sudoku {
     }
 
     public void solve() {
-        Strategy[] strategies = {
-                new EliminationRule(),
-                new OnlyPlaceRule(),
-                new IntersectionRule(),
-                new BruteForceRule()
-        };
-
         boolean works;
         outer:
         do {
             works = false;
-            for (Strategy strategy : strategies) {
+            for (Strategy strategy : STRATEGIES) {
                 if (strategy.apply(this)) {
                     works = true;
 
@@ -125,11 +128,11 @@ public class Sudoku {
     }
 
     public Iterable<? extends Cell> cells() {
-        return Arrays.asList(cells);
+        return asList(cells);
     }
 
     public Iterable<? extends Group> groups() {
-        return Arrays.asList(groups);
+        return asList(groups);
     }
 
     public void checkpoint() {
