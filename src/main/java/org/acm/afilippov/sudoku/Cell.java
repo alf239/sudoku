@@ -1,12 +1,15 @@
 package org.acm.afilippov.sudoku;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 
 import static java.lang.Integer.bitCount;
 
 public class Cell {
     private final Variation variation;
+    private final Deque<Integer> fallback = new ArrayDeque<Integer>();
     private int mask;
     private final Group[] groups = new Group[3];
     private int g = 0;
@@ -79,5 +82,17 @@ public class Cell {
 
     public boolean allows(int i) {
         return (mask & (1 << i)) != 0;
+    }
+
+    public void set(int i) {
+        mask = 1 << i;
+    }
+
+    public void checkpoint() {
+        fallback.push(mask);
+    }
+
+    public void rollback() {
+        mask = fallback.pop();
     }
 }

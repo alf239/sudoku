@@ -25,12 +25,12 @@ public class OnlyPlaceRule implements Strategy {
                 if (cell.isDecided())
                     return false;
 
-                cell.filter(~(1 << i));
+                cell.set(i);
                 return true;
             }
         }
 
-        throw new IllegalStateException("Survivor not found");
+        return false;
     }
 
     private int[] countOptions(Group group) {
