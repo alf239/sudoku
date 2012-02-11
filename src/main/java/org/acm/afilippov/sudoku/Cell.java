@@ -59,8 +59,8 @@ public class Cell {
         return "*";
     }
 
-    public boolean isValid() {
-        return mask != 0;
+    public boolean isConflicting() {
+        return mask == 0;
     }
 
     public int mask() {

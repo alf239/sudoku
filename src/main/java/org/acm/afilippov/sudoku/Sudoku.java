@@ -11,7 +11,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 public class Sudoku {
-    public static final List<Strategy> STRATEGIES =
+    private static final List<Strategy> STRATEGIES =
             unmodifiableList(asList(
                     new EliminationRule(),
                     new OnlyPlaceRule(),
@@ -86,10 +86,10 @@ public class Sudoku {
      */
     public boolean isValid() {
         for (Cell cell : cells)
-            if (!cell.isValid())
+            if (cell.isConflicting())
                 return false;
         for (Group group : groups)
-            if (!group.isValid())
+            if (group.isConflicting())
                 return false;
         return true;
     }

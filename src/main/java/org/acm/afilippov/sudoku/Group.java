@@ -29,8 +29,8 @@ public class Group implements Iterable<Cell> {
         return cells.length;
     }
 
-    public boolean isValid() {
-        return bitCount(maskDisjunction(this)) == cells.length;
+    public boolean isConflicting() {
+        return bitCount(maskDisjunction(this)) != cells.length;
     }
 
     @Override
