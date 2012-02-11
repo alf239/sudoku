@@ -20,7 +20,7 @@ public class Cell {
     public boolean filter(int drop) {
         int old = mask;
         mask &= ~drop;
-        return mask() != old;
+        return mask != old;
     }
 
     protected void join(Group group) {
