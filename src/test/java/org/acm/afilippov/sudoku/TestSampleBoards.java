@@ -53,6 +53,13 @@ public class TestSampleBoards {
     }
 
     @Test
+    public void diabolicalTask() throws IOException {
+        Sudoku sudoku = classic("diabolical.txt");
+        sudoku.solve();
+        assertTrue(sudoku.isSolved());
+    }
+
+    @Test
     public void super4X4() throws IOException {
         Sudoku sudoku = super4x4("super4x4.txt");
         sudoku.solve();
