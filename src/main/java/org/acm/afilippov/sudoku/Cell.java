@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Integer.bitCount;
-import static java.lang.Integer.toHexString;
 
 public class Cell {
     private final Variation variation;
@@ -55,10 +54,10 @@ public class Cell {
     }
 
     private String toString(int i) {
-        if (i < 15)
-            return toHexString(i);
-        if (i < 10 + ('z' - 'a'))
-            return Character.toString((char) (i - 10 + 'a'));
+        if (i < 0)
+            throw new IllegalArgumentException("Negative digits are not allowed");
+        if (i < Character.MAX_RADIX)
+            return "" + Character.forDigit(i, Character.MAX_RADIX);
         return "*";
     }
 
