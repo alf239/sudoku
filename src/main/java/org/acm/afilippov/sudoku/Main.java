@@ -10,7 +10,7 @@ import java.io.Reader;
  * Added so that {@link Sudoku} would only contain logic
  */
 public class Main {
-    private static Sudoku readTask(Reader reader, Variation variation) throws IOException {
+    static Sudoku readTask(Reader reader, Variation variation) throws IOException {
         int[] cells = new int[variation.getTotal()];
         for (int c, i = 0; (c = reader.read()) != -1; ) {
             if (c == '_')
