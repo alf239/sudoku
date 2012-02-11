@@ -63,7 +63,6 @@ public class TestSampleBoards {
         return readSudoku(filename, CLASSIC);
     }
 
-
     private Sudoku super4x4(final String filename) throws IOException {
         return readSudoku(filename, SUPER4X4);
     }
