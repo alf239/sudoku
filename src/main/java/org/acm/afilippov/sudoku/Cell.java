@@ -7,8 +7,10 @@ import static java.lang.Integer.bitCount;
 public class Cell {
     private final Variation variation;
     private final Deque<Integer> fallback = new ArrayDeque<Integer>();
-    private int mask;
     private final Group[] groups = new Group[3];
+
+    private int mask;
+
     private int g = 0;
 
     Cell(Variation variation, int value) {
